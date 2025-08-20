@@ -5,10 +5,6 @@ export const createEnhancedOpponentAnalysisPrompt = (userData: any) => {
     const totalMatches = userData.matches?.matches?.length || 0
     const opponentCount = userData.opponentProfiles?.length || 0
   
-    console.log(`Creating enhanced opponent analysis prompt for ${playerName}`)
-    console.log(`- Total matches: ${totalMatches}`)
-    console.log(`- Opponent profiles: ${opponentCount}`)
-    console.log(`- Head-to-head records: ${Object.keys(userData.headToHeadRecords || {}).length}`)
   
     return `
   You are an expert squash analyst. Analyze this player's performance against different types of opponents.

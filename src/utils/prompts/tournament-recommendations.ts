@@ -1868,7 +1868,6 @@ If they mention any other restrictions - follow them exactly.
 `
 
   }
-console.log(constraintsSection);
   return `You are a US Squash tournament strategist. Create a tournament plan using ONLY the tournaments provided below.
 
 MISSION BRIEF:

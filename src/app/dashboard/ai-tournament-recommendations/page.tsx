@@ -145,6 +145,26 @@ interface UserGoal {
 }
 
 export default function TournamentRecommendations() {
+  // Helper to display the selected timeframe in a user-friendly way
+  const getDisplayTimeline = () => {
+    if (userGoal.timeframe) {
+      switch (userGoal.timeframe) {
+        case "3-months":
+          return "3mo"
+        case "6-months":
+          return "6mo"
+        case "1-year":
+          return "1yr"
+        default:
+          return userGoal.timeframe
+      }
+    }
+    // fallback to API value if not set
+    if (recommendations?.summary?.timelineMonths) {
+      return `${recommendations.summary.timelineMonths}mo`
+    }
+    return "-"
+  }
   const [recommendations, setRecommendations] = useState<TournamentRecommendation | null>(null)
   const [loadingRecommendations, setLoadingRecommendations] = useState(false)
   const [showGoalInput, setShowGoalInput] = useState(false)
@@ -582,7 +602,7 @@ export default function TournamentRecommendations() {
       )}
 
       {/* Search and Strategic Planning Section */}
-      {!loading && !loadingTournaments && !recommendations && (
+      {!loading && !loadingTournaments && !recommendations && !showGoalInput && (
         <Card className="border-border animate-fade-in">
           <CardContent className="pt-6">
             <div className="flex flex-col gap-6">
@@ -592,7 +612,6 @@ export default function TournamentRecommendations() {
                   Generate a customized tournament plan to achieve your ranking goals
                 </p>
               </div>
-              
               <div className="bg-muted/30 p-6 rounded-lg border border-border">
                 <div className="flex flex-col items-center text-center gap-4">
                   <div className="rounded-full bg-primary/10 p-3">
@@ -693,7 +712,7 @@ export default function TournamentRecommendations() {
                   </div>
                   <TrendingUp className="h-8 w-8 text-warning" />
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-success">{recommendations.summary.timelineMonths}mo</div>
+                    <div className="text-3xl font-bold text-success">{getDisplayTimeline()}</div>
                     <div className="text-sm text-muted-foreground">Projected Timeline</div>
                   </div>
                 </div>
@@ -968,14 +987,7 @@ export default function TournamentRecommendations() {
                     </>
                   )}
                 </Button>
-                <Button 
-                  variant="outline" 
-                  onClick={() => setShowGoalInput(true)}
-                  className="border-border"
-                >
-                  <Target className="h-4 w-4 mr-2" />
-                  Adjust Goal
-                </Button>
+                
               </div>
             </CardContent>
           </Card>
