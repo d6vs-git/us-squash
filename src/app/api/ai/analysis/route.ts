@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing required parameters" }, { status: 400 })
     }
 
-    console.log(`Starting ${analysisType} analysis for user ${userId}`)
+
 
     // Get session cookie for API calls
     const sessionCookie = req.cookies.get("USSQ-API-SESSION")?.value
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Failed to fetch user data" }, { status: 500 })
     }
 
-    console.log(`Fetched user data for ${analysisType} analysis`)
+
 
     let analysis
     switch (analysisType) {
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Invalid analysis type" }, { status: 400 })
     }
 
-    console.log(`Completed ${analysisType} analysis`)
+
 
     return NextResponse.json({
       success: true,

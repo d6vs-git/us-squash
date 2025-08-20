@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(response.data)
     } catch (error) {
       // Return empty array if endpoint returns 404 or any other error
-      console.log(`Upcoming matches endpoint returned error for user ${userId}, returning empty array`)
+  console.error(`Upcoming matches endpoint returned error for user ${userId}, returning empty array`)
       return NextResponse.json([])
     }
   } catch (error) {

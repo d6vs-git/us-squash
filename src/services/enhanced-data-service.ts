@@ -4,13 +4,11 @@ export class EnhancedDataService {
    */
   static async fetchOpponentProfiles(matches: any[], sessionCookie: string) {
     if (!matches || matches.length === 0) {
-      console.log("❌ No matches provided for opponent analysis")
       return []
     }
 
     // Filter to only singles matches
-    const singlesMatches = matches.filter((match) => match.Sportid === 3)
-    console.log(`📊 Processing ${singlesMatches.length} singles matches for opponent data`)
+  const singlesMatches = matches.filter((match) => match.Sportid === 3)
 
     // Extract unique opponent IDs from singles matches only
     const opponentIds = new Set<number>()
@@ -26,8 +24,7 @@ export class EnhancedDataService {
     })
 
     // The user ID that appears most frequently is the current user
-    const currentUserId = Array.from(userIdCandidates.entries()).reduce((a, b) => (a[1] > b[1] ? a : b))[0]
-    console.log("🎯 Identified current user ID:", currentUserId)
+  const currentUserId = Array.from(userIdCandidates.entries()).reduce((a, b) => (a[1] > b[1] ? a : b))[0]
 
     // Now collect all opponent IDs from singles matches
     singlesMatches.forEach((match) => {
@@ -37,22 +34,18 @@ export class EnhancedDataService {
       })
     })
 
-    console.log(`🔍 Found ${opponentIds.size} unique singles opponents`)
 
     // Rest of the function remains the same...
     if (opponentIds.size === 0) {
-      console.log("❌ No opponent IDs found")
       return []
     }
 
     // Continue with existing logic but note we're only processing singles opponents
-    const limitedOpponentIds = Array.from(opponentIds).slice(0, 15)
-    console.log(`📡 Fetching data for ${limitedOpponentIds.length} singles opponents`)
+  const limitedOpponentIds = Array.from(opponentIds).slice(0, 15)
 
     const opponentData = await Promise.allSettled(
       limitedOpponentIds.map(async (opponentId) => {
         try {
-          console.log(`⏳ Fetching data for opponent ${opponentId}`)
 
           const [profileRes, ratingsRes, matchesRes, rankingsRes] = await Promise.all([
             fetch(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/user?userId=${opponentId}`, {
@@ -76,7 +69,6 @@ export class EnhancedDataService {
             rankingsRes.ok ? rankingsRes.json() : null,
           ])
 
-          console.log(`✅ Successfully fetched data for opponent ${opponentId} (${profile?.name || "Unknown"})`)
 
           return {
             id: opponentId,
@@ -106,12 +98,9 @@ export class EnhancedDataService {
       .map((result) => result.value)
       .filter((data) => data.profile !== null)
 
-    console.log(`🎉 Successfully fetched ${successfulResults.length} opponent profiles`)
 
     // Log opponent names for verification
-    successfulResults.forEach((opponent) => {
-      console.log(`- ${opponent.profile?.name || "Unknown"} (ID: ${opponent.id})`)
-    })
+  // ...existing code...
 
     return successfulResults
   }
@@ -122,7 +111,6 @@ export class EnhancedDataService {
    */
   static async fetchPlayerComprehensiveData(playerId: number, sessionCookie: string) {
     try {
-      console.log(`⏳ Fetching comprehensive data for player ${playerId}`)
 
       const [profileRes, ratingsRes, matchesRes, rankingsRes] = await Promise.all([
         fetch(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/user?userId=${playerId}`, {
@@ -151,7 +139,6 @@ export class EnhancedDataService {
         throw new Error(`Profile not found for player ${playerId}`)
       }
 
-      console.log(`✅ Successfully fetched comprehensive data for player ${playerId} (${profile?.name || "Unknown"})`)
 
       return {
         id: playerId,
@@ -174,13 +161,11 @@ export class EnhancedDataService {
     const headToHeadData: Record<string, any[]> = {}
 
     if (!userId || !matches?.length) {
-      console.log("❌ No user ID or matches for head-to-head analysis")
       return headToHeadData
     }
 
     // Filter to only singles matches
-    const singlesMatches = matches.filter((match) => match.Sportid === 3)
-    console.log(`📈 Analyzing head-to-head records for user ${userId} in ${singlesMatches.length} singles matches`)
+  const singlesMatches = matches.filter((match) => match.Sportid === 3)
 
     const userIdNum = Number.parseInt(userId)
 
@@ -216,15 +201,9 @@ export class EnhancedDataService {
       }
     })
 
-    console.log(`📊 Found head-to-head records against ${Object.keys(headToHeadData).length} singles opponents`)
 
     // Log head-to-head summary
-    Object.entries(headToHeadData).forEach(([key, matches]) => {
-      const wins = matches.filter((m) => m.userWon).length
-      const losses = matches.length - wins
-      const opponentName = matches[0]?.opponentName || "Unknown"
-      console.log(`- vs ${opponentName}: ${wins}-${losses} (${matches.length} singles matches)`)
-    })
+  // ...existing code...
 
     return headToHeadData
   }
@@ -233,7 +212,6 @@ export class EnhancedDataService {
    * Analyze match patterns and contexts
    */
   static analyzeMatchContexts(matches: any[]) {
-    console.log("🔍 Analyzing match contexts and patterns")
 
     const contexts = {
       tournamentLevels: new Map<string, number>(),
@@ -285,10 +263,6 @@ export class EnhancedDataService {
       seasonalPatterns: Object.fromEntries(contexts.seasonalPatterns),
     }
 
-    console.log("📊 Match context analysis complete:")
-    console.log(`- Tournament levels: ${Object.keys(result.tournamentLevels).length}`)
-    console.log(`- Match types: ${Object.keys(result.matchTypes).length}`)
-    console.log(`- Venues: ${Object.keys(result.venues).length}`)
 
     return result
   }
@@ -318,7 +292,6 @@ export class EnhancedDataService {
    * Calculate performance metrics against different opponent types
    */
   static calculateOpponentTypePerformance(matches: any[], opponentProfiles: any[], userId: string) {
-    console.log("📊 Calculating performance against different opponent types in singles")
 
     // Filter to only singles matches
     const singlesMatches = matches.filter((match) => match.Sportid === 3)
@@ -382,9 +355,6 @@ export class EnhancedDataService {
       byRankingLevel: Object.fromEntries(performance.byRankingLevel),
     }
 
-    console.log("📈 Singles opponent type performance calculated:")
-    console.log(`- Rating ranges: ${Object.keys(result.byRatingRange).length}`)
-    console.log(`- Age groups: ${Object.keys(result.byAge).length}`)
 
     return result
   }

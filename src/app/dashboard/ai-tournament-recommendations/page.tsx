@@ -25,6 +25,14 @@ import {
   Calendar,
   DollarSign,
   AlertTriangle,
+  Loader2,
+  Info,
+  Trophy,
+  CalendarRange,
+  Crown,
+  Star,
+  ChevronRight,
+  Sparkles,
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { downloadPDF, generateTournamentRecommendationsPDF, generateTournamentRecommendationsPDFFilename } from "@/utils/pdf-generator"
@@ -187,85 +195,53 @@ export default function TournamentRecommendations() {
     }
   }
 
-  // 1. First, ensure your tournament data structure matches the Tournament interface
-interface Tournament {
-  TournamentID: number;
-  TournamentName: string;
-  StartDate: string;
-  EndDate: string;
-  Entry_Open?: string;
-  Entry_Close?: string;
-  Registration_Deadline?: string;
-  SiteCity?: string;
-  State?: string;
-  EventType?: string;
-  EventTypeCode?: number;
-  MaxRating?: number;
-  MinRating?: number;
-  AgeRestrictions?: string;
-  regularFee?: {
-    price: number;
+  const transformTournamentData = (rawData: any[]): Tournament[] => {
+    return rawData.map(item => ({
+      TournamentID: item.TournamentID,
+      TournamentName: item.TournamentName || `Tournament #${item.TournamentID}`,
+      StartDate: item.StartDate || new Date().toISOString(),
+      EndDate: item.EndDate || new Date().toISOString(),
+      Entry_Open: item.Entry_Open,
+      Entry_Close: item.Entry_Close,
+      Registration_Deadline: item.Registration_Deadline,
+      SiteCity: item.SiteCity,
+      State: item.State,
+      EventType: item.EventType,
+      EventTypeCode: item.EventTypeCode,
+      MaxRating: item.MaxRating,
+      MinRating: item.MinRating,
+      AgeRestrictions: item.AgeRestrictions,
+      regularFee: item.regularFee ? {
+        price: Number(item.regularFee.price) || 0
+      } : undefined,
+      RankingPoints: item.RankingPoints,
+      Unsanctioned: item.Unsanctioned,
+      RegistrationOpen: item.RegistrationOpen,
+      ClubLockerUrl: item.ClubLockerUrl,
+      Description: item.Description,
+      TournamentContact: item.TournamentContact,
+      ContactEmail: item.ContactEmail,
+      OrganizerOrganization: item.OrganizerOrganization,
+      URL: item.URL,
+      VenueId: item.VenueId,
+      RankingPeriod: item.RankingPeriod,
+      NumPlayers: item.NumPlayers,
+      PlayersOnDraw: item.PlayersOnDraw,
+      EntryForm: item.EntryForm,
+      NumMatches: item.NumMatches,
+      CreateDate: item.CreateDate,
+      UpdateDate: item.UpdateDate,
+      SeasonID: item.SeasonID,
+      LogoImageUrl: item.LogoImageUrl,
+      OrganizerLogoUrl: item.OrganizerLogoUrl,
+      StartingTimesID: item.StartingTimesID,
+      Pictures_URL: item.Pictures_URL,
+      OrganizationLat: item.OrganizationLat,
+      OrganizationLong: item.OrganizationLong,
+      OrganizationDistance: item.OrganizationDistance,
+      VenueName: item.VenueName
+    }));
   };
-  RankingPoints?: number;
-  Unsanctioned?: number;
-  RegistrationOpen?: boolean;
-  ClubLockerUrl?: string;
-  Description?: string;
-  TournamentContact?: string;
-  ContactEmail?: string;
-  OrganizerOrganization?: number;
-  URL?: string;
-  // ... other optional fields
-}
-
-// 2. Transform your array data to match the interface
-const transformTournamentData = (rawData: any[]): Tournament[] => {
-  return rawData.map(item => ({
-    TournamentID: item.TournamentID,
-    TournamentName: item.TournamentName || `Tournament #${item.TournamentID}`,
-    StartDate: item.StartDate || new Date().toISOString(),
-    EndDate: item.EndDate || new Date().toISOString(),
-    Entry_Open: item.Entry_Open,
-    Entry_Close: item.Entry_Close,
-    Registration_Deadline: item.Registration_Deadline,
-    SiteCity: item.SiteCity,
-    State: item.State,
-    EventType: item.EventType,
-    EventTypeCode: item.EventTypeCode,
-    MaxRating: item.MaxRating,
-    MinRating: item.MinRating,
-    AgeRestrictions: item.AgeRestrictions,
-    regularFee: item.regularFee ? {
-      price: Number(item.regularFee.price) || 0
-    } : undefined,
-    RankingPoints: item.RankingPoints,
-    Unsanctioned: item.Unsanctioned,
-    RegistrationOpen: item.RegistrationOpen,
-    ClubLockerUrl: item.ClubLockerUrl,
-    Description: item.Description,
-    TournamentContact: item.TournamentContact,
-    ContactEmail: item.ContactEmail,
-    OrganizerOrganization: item.OrganizerOrganization,
-    URL: item.URL,
-    VenueId: item.VenueId,
-    RankingPeriod: item.RankingPeriod,
-    NumPlayers: item.NumPlayers,
-    PlayersOnDraw: item.PlayersOnDraw,
-    EntryForm: item.EntryForm,
-    NumMatches: item.NumMatches,
-    CreateDate: item.CreateDate,
-    UpdateDate: item.UpdateDate,
-    SeasonID: item.SeasonID,
-    LogoImageUrl: item.LogoImageUrl,
-    OrganizerLogoUrl: item.OrganizerLogoUrl,
-    StartingTimesID: item.StartingTimesID,
-    Pictures_URL: item.Pictures_URL,
-    OrganizationLat: item.OrganizationLat,
-    OrganizationLong: item.OrganizationLong,
-    OrganizationDistance: item.OrganizationDistance,
-    VenueName: item.VenueName
-  }));
-};
 
   const fetchTournaments = async () => {
     try {
@@ -276,8 +252,7 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
       
       if (response.ok) {
         const data = await response.json()
-        setTournaments(transformTournamentData(data) || [])
-        console.log(`Loaded ${data.tournaments?.length || 0} tournaments`)
+  setTournaments(transformTournamentData(data) || [])
       } else {
         console.warn("Failed to fetch tournaments, using empty list")
         setTournaments([])
@@ -319,7 +294,7 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
         credentials: "include",
         body: JSON.stringify({
           userId,
-          tournaments, // This will now have actual tournament data
+          tournaments,
           userGoal,
         }),
       });
@@ -328,7 +303,6 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
         const errorData = await response.json().catch(() => ({}));
         console.error("API response error:", response.status, errorData);
         
-        // Provide user-friendly error messages
         let errorMessage = "Failed to generate recommendations";
         if (response.status === 401) {
           errorMessage = "Authentication expired. Please refresh the page and try again.";
@@ -343,7 +317,6 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
 
       const data = await response.json();
       if (data.success && data.recommendations) {
-        // Validate the recommendations structure
         if (!data.recommendations.currentAnalysis) {
           throw new Error("Invalid recommendations: missing current analysis data");
         }
@@ -409,7 +382,7 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
   const getTournamentTypeColor = (type: string) => {
     switch (type) {
       case "JCT":
-        return "bg-accent text-accent-foreground"
+        return "bg-primary text-primary-foreground"
       case "Gold":
         return "bg-warning text-warning-foreground"
       case "Silver":
@@ -434,15 +407,36 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
     }
   }
 
+  const getSuccessProbabilityBgColor = (probability: string) => {
+    switch (probability) {
+      case "high":
+        return "bg-success/20"
+      case "medium":
+        return "bg-warning/20"
+      case "low":
+        return "bg-destructive/20"
+      default:
+        return "bg-muted"
+    }
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4">
+      {/* Header */}
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold tracking-tight">Tournament Strategy Planner</h1>
+        <p className="text-muted-foreground">
+          Create a personalized tournament plan to achieve your ranking goals
+        </p>
+      </div>
+
       {/* Loading State */}
       {(loading || loadingTournaments) && (
-        <Card>
+        <Card className="border-border">
           <CardContent className="pt-6">
             <div className="flex items-center justify-center py-8">
-              <div className="flex items-center gap-2">
-                <Brain className="h-5 w-5 animate-pulse" />
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Loader2 className="h-5 w-5 animate-spin" />
                 <span>Loading tournament data...</span>
               </div>
             </div>
@@ -452,19 +446,23 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
 
       {/* Tournament Data Status */}
       {!loading && !loadingTournaments && (
-        <Card className="animate-fade-in">
+        <Card className="border-border animate-fade-in">
           <CardContent className="pt-6">
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3">
               {tournaments.length > 0 ? (
                 <>
-                  <CheckCircle className="h-5 w-5 text-success" />
+                  <div className="rounded-full bg-success/20 p-2">
+                    <CheckCircle className="h-5 w-5 text-success" />
+                  </div>
                   <span className="text-sm">
                     {tournaments.length} tournaments loaded for analysis
                   </span>
                 </>
               ) : (
                 <>
-                  <AlertTriangle className="h-5 w-5 text-warning" />
+                  <div className="rounded-full bg-warning/20 p-2">
+                    <AlertTriangle className="h-5 w-5 text-warning" />
+                  </div>
                   <span className="text-sm text-warning">
                     No tournament data available. Recommendations will be based on historical patterns.
                   </span>
@@ -477,9 +475,9 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
 
       {/* Goal Input Section */}
       {showGoalInput && (
-        <Card className="animate-slide-up">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        <Card className="border-border animate-slide-up">
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2 text-xl">
               <Target className="h-5 w-5" />
               Set Your Ranking Goal
             </CardTitle>
@@ -492,7 +490,7 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
               <div className="space-y-2">
                 <Label htmlFor="goalType">Goal Type</Label>
                 <Select value={userGoal.type} onValueChange={(value) => setUserGoal({ ...userGoal, type: value })}>
-                  <SelectTrigger>
+                  <SelectTrigger className="border-border">
                     <SelectValue placeholder="Select your primary goal" />
                   </SelectTrigger>
                   <SelectContent>
@@ -510,7 +508,7 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                   value={userGoal.timeframe}
                   onValueChange={(value) => setUserGoal({ ...userGoal, timeframe: value })}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="border-border">
                     <SelectValue placeholder="Select timeframe" />
                   </SelectTrigger>
                   <SelectContent>
@@ -532,6 +530,7 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                 onChange={(e) =>
                   setUserGoal({ ...userGoal, targetRanking: Number.parseInt(e.target.value) || undefined })
                 }
+                className="border-border"
               />
               <p className="text-xs text-muted-foreground">
                 Enter the ranking position you want to achieve (e.g., 20 for top 20)
@@ -546,11 +545,12 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                 value={userGoal.description}
                 onChange={(e) => setUserGoal({ ...userGoal, description: e.target.value })}
                 rows={3}
+                className="border-border"
               />
             </div>
 
             {error && (
-              <div className="p-3 bg-destructive/10 text-destructive rounded-lg text-sm">
+              <div className="p-3 bg-destructive/10 text-destructive rounded-lg text-sm border border-destructive/20">
                 {error}
               </div>
             )}
@@ -559,11 +559,11 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
               <Button
                 onClick={generateStrategicRecommendations}
                 disabled={!userGoal.targetRanking || loadingRecommendations || loading || loadingTournaments}
-                className="transition-all-smooth hover-lift"
+                className="transition-all"
               >
                 {loadingRecommendations ? (
                   <>
-                    <Brain className="h-4 w-4 animate-pulse mr-2" />
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
                     Analyzing Rankings...
                   </>
                 ) : (
@@ -573,7 +573,7 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                   </>
                 )}
               </Button>
-              <Button variant="outline" onClick={() => setShowGoalInput(false)}>
+              <Button variant="outline" onClick={() => setShowGoalInput(false)} className="border-border">
                 Cancel
               </Button>
             </div>
@@ -582,94 +582,38 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
       )}
 
       {/* Search and Strategic Planning Section */}
-      {!loading && !loadingTournaments && (
-        <Card className="animate-fade-in">
+      {!loading && !loadingTournaments && !recommendations && (
+        <Card className="border-border animate-fade-in">
           <CardContent className="pt-6">
-            <div className="flex flex-col md:flex-row gap-4 items-center">
-              <div className="flex-1">
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-2">
                 <h3 className="text-lg font-semibold">Tournament Strategy Planner</h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground">
                   Generate a customized tournament plan to achieve your ranking goals
                 </p>
               </div>
-              <div className="flex gap-2">
-                <Button
-                  onClick={() => {
-                    if (
-                      !userGoal.targetRanking ||
-                      userGoal.targetRanking <= 0 ||
-                      !userGoal.type ||
-                      !userGoal.timeframe
-                    ) {
-                      setShowGoalInput(true);
-                      setError("Please fill all required fields: Goal Type, Timeframe, and Target Ranking.");
-                    } else {
-                      generateStrategicRecommendations();
-                    }
-                  }}
-                  disabled={loadingRecommendations}
-                  className="transition-all-smooth hover-lift"
-                >
-                  {loadingRecommendations ? (
-                    <>
-                      <Brain className="h-4 w-4 animate-pulse mr-2" />
-                      Analyzing Rankings...
-                    </>
-                  ) : (
-                    <>
-                      <Brain className="h-4 w-4 mr-2" />
-                      Strategic Tournament Plan
-                    </>
-                  )}
-                </Button>
-
-                {recommendations && (
-                  <Button 
-                    onClick={exportTournamentPlanToPDF} 
-                    variant="outline"
-                    disabled={pdfGenerating}
-                    className="transition-all-smooth hover-lift"
-                  >
-                    {pdfGenerating ? (
-                      <>
-                        <Download className="h-4 w-4 animate-pulse mr-2" />
-                        Generating...
-                      </>
-                    ) : (
-                      <>
-                        <Download className="h-4 w-4 mr-2" />
-                        Export Plan
-                      </>
-                    )}
-                  </Button>
-                )}
-              </div>
-            </div>
-
-            {userGoal.targetRanking && (
-              <div className="mt-4 p-4 bg-accent/20 rounded-lg border border-accent/30">
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-accent-foreground mt-0.5" />
-                  <div>
-                    <h4 className="font-medium text-accent-foreground">Target Ranking Goal</h4>
-                    <p className="text-sm text-accent-foreground/80 mt-1">
-                      Aiming for ranking #{userGoal.targetRanking} in your division
-                    </p>
-                    {userGoal.description && (
-                      <p className="text-sm text-accent-foreground/80 mt-1">{userGoal.description}</p>
-                    )}
-                    <Button
-                      variant="link"
-                      size="sm"
-                      onClick={() => setShowGoalInput(true)}
-                      className="text-accent-foreground p-0 h-auto"
-                    >
-                      Edit Goal
-                    </Button>
+              
+              <div className="bg-muted/30 p-6 rounded-lg border border-border">
+                <div className="flex flex-col items-center text-center gap-4">
+                  <div className="rounded-full bg-primary/10 p-3">
+                    <Sparkles className="h-6 w-6 text-primary" />
                   </div>
+                  <div>
+                    <h4 className="font-semibold">Create Your Tournament Strategy</h4>
+                    <p className="text-muted-foreground text-sm mt-1">
+                      Set your ranking goal to generate a personalized tournament plan
+                    </p>
+                  </div>
+                  <Button
+                    onClick={() => setShowGoalInput(true)}
+                    className="mt-2"
+                  >
+                    <Target className="h-4 w-4 mr-2" />
+                    Set Ranking Goal
+                  </Button>
                 </div>
               </div>
-            )}
+            </div>
           </CardContent>
         </Card>
       )}
@@ -678,17 +622,17 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
       {recommendations && (
         <div className="space-y-6">
           {/* Current Analysis Overview */}
-          <Card className="animate-slide-up">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+          <Card className="border-border animate-slide-up">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-xl">
                 <BarChart3 className="h-5 w-5" />
                 Current Analysis & Target Player
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Current Player Stats */}
-                <div className="space-y-4 p-4 bg-surface rounded-lg">
+                <div className="space-y-4 p-4 bg-muted/30 rounded-lg border border-border">
                   <h3 className="font-semibold flex items-center gap-2">
                     <User className="h-4 w-4" />
                     Your Current Position
@@ -713,7 +657,7 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                 </div>
 
                 {/* Target Player Stats */}
-                <div className="space-y-4 p-4 bg-surface rounded-lg">
+                <div className="space-y-4 p-4 bg-muted/30 rounded-lg border border-border">
                   <h3 className="font-semibold flex items-center gap-2">
                     <Target className="h-4 w-4" />
                     Target Player to Surpass
@@ -739,8 +683,8 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
               </div>
 
               {/* Gap Analysis */}
-              <div className="mt-6 p-4 bg-warning/10 rounded-lg border border-warning/20">
-                <div className="flex items-center justify-center gap-4">
+              <div className="p-4 bg-warning/10 rounded-lg border border-warning/20">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                   <div className="text-center">
                     <div className="text-3xl font-bold text-warning">
                       +{recommendations.currentAnalysis.averagedPointsGap}
@@ -764,7 +708,9 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                 <Zap className="h-4 w-4 text-primary-foreground" />
               </div>
               <h2 className="text-xl font-semibold">Tournament Sequence Plan</h2>
-              <Badge variant="secondary">{recommendations.tournamentSequence.length} tournaments</Badge>
+              <Badge variant="secondary" className="bg-muted text-muted-foreground">
+                {recommendations.tournamentSequence.length} tournaments
+              </Badge>
             </div>
 
             {/* Tournament Cards */}
@@ -779,13 +725,18 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                 const registrationLink = tournament.ClubLockerUrl || tournament.URL || ""
 
                 return (
-                  <Card key={item.sequenceNumber} className="transition-all-smooth hover-lift">
-                    <div className="h-1 bg-gradient-to-r from-primary to-accent rounded-t-lg"></div>
+                  <Card key={item.sequenceNumber} className="border-border transition-all hover:shadow-md">
+                    <div className="h-2 bg-gradient-to-r from-primary to-primary/70 rounded-t-lg"></div>
                     <CardHeader className="pb-4">
-                      <div className="flex items-start justify-between">
+                      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                         <div className="flex-1">
-                          <CardTitle className="text-lg">{tournament.TournamentName}</CardTitle>
-                          <CardDescription className="flex flex-wrap items-center gap-4 mt-2">
+                          <div className="flex items-start gap-2">
+                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground">
+                              {item.sequenceNumber}
+                            </div>
+                            <CardTitle className="text-lg">{tournament.TournamentName}</CardTitle>
+                          </div>
+                          <CardDescription className="flex flex-col gap-2 mt-2">
                             <span className="flex items-center gap-1">
                               <MapPin className="h-3 w-3" />
                               {location}
@@ -794,16 +745,16 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                               <Calendar className="h-3 w-3" />
                               {formatDate(tournament.StartDate)}
                             </span>
-                            {entryFee && (
+                            {entryFee && entryFee !== "N/A" && (
                               <span className="flex items-center gap-1">
                                 <DollarSign className="h-3 w-3" />
-                                {entryFee}
+                                Entry: ${entryFee}
                               </span>
                             )}
                           </CardDescription>
                         </div>
-                        <div className="text-right">
-                          <Badge className={`${getTournamentTypeColor(item.strategy.tournamentType)} mb-2`}>
+                        <div className="flex flex-col items-end gap-2">
+                          <Badge className={`${getTournamentTypeColor(item.strategy.tournamentType)}`}>
                             {item.strategy.tournamentType}
                           </Badge>
                           <div className="text-sm text-muted-foreground">
@@ -814,7 +765,7 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                     </CardHeader>
                     <CardContent className="space-y-6">
                       {/* Strategy Section */}
-                      <div className="bg-surface rounded-lg p-4">
+                      <div className="bg-muted/30 rounded-lg p-4 border border-border">
                         <div className="flex items-center gap-2 mb-3">
                           <Target className="h-4 w-4" />
                           <span className="font-semibold">Tournament Strategy</span>
@@ -845,7 +796,7 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                       </div>
 
                       {/* Points Progression */}
-                      <div className="bg-success/5 rounded-lg p-4 border border-success/10">
+                      <div className="bg-success/10 rounded-lg p-4 border border-success/20">
                         <div className="flex items-center gap-2 mb-3">
                           <TrendingUp className="h-4 w-4 text-success" />
                           <span className="font-semibold">Points Progression</span>
@@ -861,7 +812,7 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                           </div>
                           <div>
                             <span className="text-sm font-medium text-muted-foreground">New Total:</span>
-                            <div className="text-xl font-bold text-success">
+                            <div className="text-xl font-bold">
                               {Math.round(item.pointsProgression.newTotalPoints)}
                             </div>
                           </div>
@@ -869,7 +820,7 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                             <span className="text-sm font-medium text-muted-foreground">
                               New Exposures:
                             </span>
-                            <div className="text-xl font-bold text-success">
+                            <div className="text-xl font-bold">
                               {item.pointsProgression.newExposures}
                             </div>
                           </div>
@@ -884,13 +835,13 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                         </div>
 
                         {/* Progress toward target */}
-                        <div className="mt-4 p-3 bg-surface rounded-lg border">
-                          <div className="flex items-center justify-between">
+                        <div className="mt-4 p-3 bg-muted/30 rounded-lg border border-border">
+                          <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                             <div className="flex items-center gap-2">
                               <Award className="h-4 w-4 text-success" />
                               <span className="font-medium">Progress Update:</span>
                             </div>
-                            <div className="text-right">
+                            <div>
                               {item.pointsProgression.remainingGap > 0 ? (
                                 <div className="flex items-center gap-1">
                                   <TrendingDown className="h-4 w-4 text-warning" />
@@ -928,7 +879,7 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                         <div className="flex justify-center pt-4">
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <div className="h-px bg-border flex-1"></div>
-                            <ArrowRight className="h-4 w-4" />
+                            <ChevronRight className="h-4 w-4" />
                             <div className="h-px bg-border flex-1"></div>
                           </div>
                         </div>
@@ -941,16 +892,16 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
           </div>
 
           {/* Summary */}
-          <Card className="animate-slide-up">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+          <Card className="border-border animate-slide-up">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-xl">
                 <Calculator className="h-5 w-5" />
                 Tournament Plan Summary
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4 p-4 bg-surface rounded-lg">
+                <div className="space-y-4 p-4 bg-muted/30 rounded-lg border border-border">
                   <h3 className="font-semibold">Plan Overview</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="text-center">
@@ -965,7 +916,7 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                     </div>
                   </div>
                 </div>
-                <div className="space-y-4 p-4 bg-surface rounded-lg">
+                <div className="space-y-4 p-4 bg-muted/30 rounded-lg border border-border">
                   <h3 className="font-semibold">Expected Outcome</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="text-center">
@@ -984,21 +935,47 @@ const transformTournamentData = (rawData: any[]): Tournament[] => {
                 </div>
               </div>
 
-              <div className="mt-6 p-4 bg-surface rounded-lg border">
-                <div className="flex items-center justify-between">
+              <div className="p-4 bg-muted/30 rounded-lg border border-border">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
                     <h4 className="font-semibold">Target Player to Surpass:</h4>
                     <p className="text-muted-foreground">{recommendations.summary.targetPlayerToSurpass}</p>
                   </div>
                   <div className="text-right">
-                    <div
-                      className={`text-lg font-bold ${getSuccessProbabilityColor(recommendations.summary.successProbability)}`}
-                    >
+                    <div className={`text-lg font-bold ${getSuccessProbabilityColor(recommendations.summary.successProbability)}`}>
                       {recommendations.summary.successProbability.toUpperCase()}
                     </div>
                     <div className="text-sm text-muted-foreground">Success Probability</div>
                   </div>
                 </div>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <Button 
+                  onClick={exportTournamentPlanToPDF} 
+                  disabled={pdfGenerating}
+                  className="flex-1"
+                >
+                  {pdfGenerating ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      Generating PDF...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="h-4 w-4 mr-2" />
+                      Export Tournament Plan
+                    </>
+                  )}
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowGoalInput(true)}
+                  className="border-border"
+                >
+                  <Target className="h-4 w-4 mr-2" />
+                  Adjust Goal
+                </Button>
               </div>
             </CardContent>
           </Card>

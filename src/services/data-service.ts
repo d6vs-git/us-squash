@@ -8,7 +8,6 @@ export class DataService {
     }
 
     try {
-      console.log(`Fetching comprehensive data for user ${userId}`)
 
       const [
         profile,
@@ -102,12 +101,6 @@ export class DataService {
         ladders: ladders.status === "fulfilled" ? ladders.value.data : [],
       }
 
-      console.log(`Successfully fetched singles-only data for user ${userId}:`)
-      console.log(`- Profile: ${!!userData.profile}`)
-      console.log(`- Singles Matches: ${userData.matches?.matches?.length || 0}`)
-      console.log(`- Singles Ratings: ${userData.ratings?.length || 0}`)
-      console.log(`- Singles Tournaments: ${userData.tournaments?.tournaments?.length || 0}`)
-      console.log(`- Rankings: ${userData.rankings?.length || 0}`)
 
       return userData
     } catch (error) {

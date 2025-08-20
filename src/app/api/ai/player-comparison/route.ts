@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing required parameters: userId and comparisonPlayerId" }, { status: 400 })
     }
 
-    console.log(`Starting player comparison analysis for user ${userId} against player ${comparisonPlayerId}`)
+
 
     // Get session cookie for API calls
     const sessionCookie = req.cookies.get("USSQ-API-SESSION")?.value
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
     const analysis = await AnalysisService.generatePlayerComparisonAnalysis(userId, comparisonPlayerId, sessionCookie)
 
-    console.log(`Completed player comparison analysis for user ${userId} against player ${comparisonPlayerId}`)
+
 
     return NextResponse.json({
       success: true,

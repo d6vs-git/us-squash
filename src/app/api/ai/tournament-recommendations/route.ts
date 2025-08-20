@@ -14,9 +14,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing userGoal or targetRanking" }, { status: 400 })
     }
 
-    console.log(`Generating tournament recommendations for user ${userId}`)
-    console.log(`User goal:`, userGoal)
-    console.log(`Number of tournaments provided:`, tournaments?.length || 0)
+
+
+
 
     // Get session cookie for API calls
     const sessionCookie = req.cookies.get("USSQ-API-SESSION")?.value
@@ -25,19 +25,19 @@ export async function POST(req: NextRequest) {
     }
 
     // Fetch comprehensive user data
-    console.log(`Fetching user data for userId: ${userId}`)
+
     const userData = await DataService.fetchUserData(userId, sessionCookie)
 
     if (!userData || !userData.profile) {
       return NextResponse.json({ error: "Failed to fetch user data" }, { status: 400 })
     }
 
-    console.log(`User data fetched successfully for: ${userData.profile.name}`)
+
 
     // Fetch upcoming tournaments if none provided
     let tournamentsToUse = tournaments || []
     if (!tournamentsToUse || tournamentsToUse.length === 0) {
-      console.log("No tournaments provided, fetching upcoming tournaments...")
+
       try {
         // Fetch upcoming tournaments from your API
         const tournamentsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tournaments`, {
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
         if (tournamentsResponse.ok) {
           const tournamentsData = await tournamentsResponse.json()
           tournamentsToUse = tournamentsData.tournaments || []
-          console.log(`Fetched ${tournamentsToUse.length} upcoming tournaments`)
+
         } else {
           console.warn("Failed to fetch upcoming tournaments, proceeding with empty list")
         }
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Generate recommendations - service handles all data fetching internally
-    console.log("Calling TournamentRecommendationService.generateRecommendations...")
+
     const recommendations = await TournamentRecommendationService.generateRecommendations(
       userData,
       tournamentsToUse,
@@ -85,19 +85,15 @@ export async function POST(req: NextRequest) {
       throw new Error("Missing summary in response")
     }
 
-    console.log(`Generated tournament recommendations successfully`)
-    console.log(`Recommendations structure:`, {
-      hasCurrentAnalysis: !!recommendations.currentAnalysis,
-      tournamentSequenceCount: recommendations.tournamentSequence?.length || 0,
-      hasSummary: !!recommendations.summary,
-    })
-
     return NextResponse.json({
       success: true,
       recommendations,
       userGoal,
       userId,
       timestamp: new Date().toISOString(),
+      hasCurrentAnalysis: !!recommendations.currentAnalysis,
+      tournamentSequenceCount: recommendations.tournamentSequence?.length || 0,
+      hasSummary: !!recommendations.summary,
     })
   } catch (error) {
     console.error("Tournament recommendation generation failed:", error)
