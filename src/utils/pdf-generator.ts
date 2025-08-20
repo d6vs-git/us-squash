@@ -1,4 +1,3 @@
-// utils/pdfGenerator.ts
 import { AnalysisPDFDocument } from '@/components/pdf/analysis-pdf-document';
 import { PlayerComparisonPDFDocument } from '@/components/pdf/player-comparision-pdf-document';
 import { TournamentRecommendationsPDFDocument } from '@/components/pdf/tournaments-recommendation-pdf-document';
@@ -171,7 +170,9 @@ export async function generateSingleAnalysisPDF(options: PDFGenerationOptions): 
     isCombined: false
   });
 
-  const blob = await pdf(doc).toBlob();
+  const reactElement = doc as React.ReactElement<any, any>;
+  const typedElement = reactElement as React.ReactElement<import('@react-pdf/renderer').DocumentProps>;
+  const blob = await pdf(typedElement).toBlob();
   return blob;
 }
 
@@ -211,7 +212,9 @@ export async function generateCombinedAnalysisPDF(options: CombinedPDFOptions): 
     isCombined: true
   });
 
-  const blob = await pdf(doc).toBlob();
+  const reactElement = doc as React.ReactElement<any, any>;
+  const typedElement = reactElement as React.ReactElement<import('@react-pdf/renderer').DocumentProps>;
+  const blob = await pdf(typedElement).toBlob();
   return blob;
 }
 
@@ -220,6 +223,8 @@ export async function generateCombinedAnalysisPDF(options: CombinedPDFOptions): 
  */
 export async function generatePlayerComparisonPDF(options: PlayerComparisonPDFOptions): Promise<Blob> {
   const { userId, comparisonPlayer, comparisonAnalysis, timestamp, metadata = {} } = options;
+  // Use FullPlayerName as currentUserName for the current user
+  const currentUserName = comparisonPlayer.FullPlayerName || comparisonPlayer.fname + ' ' + comparisonPlayer.lname;
   
   const pdfMetadata = {
     title: `Player Comparison: ${comparisonPlayer.fname} ${comparisonPlayer.lname} - User ${userId}`,
@@ -235,13 +240,16 @@ export async function generatePlayerComparisonPDF(options: PlayerComparisonPDFOp
 
   const doc = PlayerComparisonPDFDocument({
     userId,
+    currentUserName,
     comparisonPlayer,
     comparisonAnalysis,
     timestamp,
     metadata: pdfMetadata
   });
-
-  const blob = await pdf(doc).toBlob();
+  // Ensure doc is a valid ReactElement
+  const reactElement = doc as React.ReactElement<any, any>;
+  const typedElement = reactElement as React.ReactElement<import('@react-pdf/renderer').DocumentProps>;
+  const blob = await pdf(typedElement).toBlob();
   return blob;
 }
 
@@ -270,8 +278,10 @@ export async function generateTournamentRecommendationsPDF(options: TournamentRe
     timestamp,
     metadata: pdfMetadata
   });
-
-  const blob = await pdf(doc).toBlob();
+  // Ensure doc is a valid ReactElement<DocumentProps>
+  const reactElement = doc as React.ReactElement<any, any>;
+  const typedElement = reactElement as React.ReactElement<import('@react-pdf/renderer').DocumentProps>;
+  const blob = await pdf(typedElement).toBlob();
   return blob;
 }
 

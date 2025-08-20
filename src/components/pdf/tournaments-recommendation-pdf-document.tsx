@@ -93,19 +93,26 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: '#6b7280',
   },
+  centeredContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   gapAnalysis: {
     backgroundColor: '#fef3c7',
-    padding: 15,
+    padding: 20,
     borderRadius: 8,
-    marginBottom: 20,
+    marginBottom: 30,
     borderLeftWidth: 4,
     borderLeftColor: '#f59e0b',
+    width: '80%',
   },
   gapTitle: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#92400e',
-    marginBottom: 10,
+    marginBottom: 15,
+    textAlign: 'center',
   },
   gapGrid: {
     flexDirection: 'row',
@@ -116,26 +123,48 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   gapValue: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#d97706',
     marginBottom: 2,
   },
   gapLabel: {
-    fontSize: 9,
+    fontSize: 10,
     color: '#92400e',
+  },
+  strategyOverview: {
+    backgroundColor: '#f0f9ff',
+    padding: 20,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#0ea5e9',
+    width: '80%',
+  },
+  strategyOverviewTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#0c4a6e',
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  strategyOverviewText: {
+    fontSize: 12,
+    lineHeight: 1.6,
+    color: '#0f172a',
+    textAlign: 'center',
   },
   tournamentCard: {
     backgroundColor: '#ffffff',
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#e5e7eb',
-    borderRadius: 8,
-    marginBottom: 20,
+    borderRadius: 12,
     overflow: 'hidden',
+    width: '90%',
+    maxWidth: 500,
   },
   tournamentHeader: {
     backgroundColor: '#3b82f6',
-    padding: 12,
+    padding: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -143,36 +172,37 @@ const styles = StyleSheet.create({
   tournamentNumber: {
     backgroundColor: '#ffffff',
     color: '#3b82f6',
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
-    padding: 6,
-    borderRadius: 12,
-    width: 24,
-    height: 24,
+    padding: 8,
+    borderRadius: 16,
+    width: 32,
+    height: 32,
     textAlign: 'center',
+    lineHeight: 1,
   },
   tournamentName: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#ffffff',
     flex: 1,
-    marginLeft: 10,
+    marginLeft: 15,
   },
   tournamentType: {
     backgroundColor: '#ffffff',
     color: '#3b82f6',
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: 'bold',
-    padding: 4,
-    borderRadius: 4,
+    padding: 6,
+    borderRadius: 6,
   },
   tournamentContent: {
-    padding: 15,
+    padding: 20,
   },
   tournamentInfo: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 15,
+    marginBottom: 20,
   },
   infoColumn: {
     flex: 1,
@@ -186,31 +216,32 @@ const styles = StyleSheet.create({
   infoValue: {
     fontSize: 11,
     color: '#374151',
-    marginBottom: 8,
+    marginBottom: 10,
   },
   strategySection: {
     backgroundColor: '#eff6ff',
-    padding: 12,
-    borderRadius: 6,
-    marginBottom: 15,
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 20,
   },
   strategyTitle: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: 'bold',
     color: '#1e40af',
-    marginBottom: 8,
+    marginBottom: 10,
+    textAlign: 'center',
   },
   strategyGrid: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: 12,
   },
   strategyItem: {
     textAlign: 'center',
     flex: 1,
   },
   strategyValue: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#1e40af',
     marginBottom: 2,
@@ -223,31 +254,33 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#4b5563',
     lineHeight: 1.4,
+    textAlign: 'center',
   },
   progressSection: {
     backgroundColor: '#f0fdf4',
-    padding: 12,
-    borderRadius: 6,
-    borderLeftWidth: 3,
+    padding: 15,
+    borderRadius: 8,
+    borderLeftWidth: 4,
     borderLeftColor: '#10b981',
   },
   progressTitle: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: 'bold',
     color: '#065f46',
-    marginBottom: 8,
+    marginBottom: 10,
+    textAlign: 'center',
   },
   progressGrid: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: 12,
   },
   progressItem: {
     textAlign: 'center',
     flex: 1,
   },
   progressValue: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#059669',
     marginBottom: 2,
@@ -258,39 +291,42 @@ const styles = StyleSheet.create({
   },
   progressUpdate: {
     backgroundColor: '#ffffff',
-    padding: 8,
-    borderRadius: 4,
+    padding: 10,
+    borderRadius: 6,
     borderWidth: 1,
     borderColor: '#d1fae5',
   },
   progressUpdateText: {
-    fontSize: 9,
+    fontSize: 10,
     color: '#374151',
-    lineHeight: 1.3,
+    lineHeight: 1.4,
+    textAlign: 'center',
   },
   summarySection: {
     backgroundColor: '#f8fafc',
-    padding: 20,
-    borderRadius: 8,
-    marginTop: 30,
+    padding: 25,
+    borderRadius: 12,
+    width: '90%',
+    borderWidth: 2,
+    borderColor: '#e2e8f0',
   },
   summaryTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#1f2937',
-    marginBottom: 15,
+    marginBottom: 20,
     textAlign: 'center',
   },
   summaryGrid: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 15,
+    marginBottom: 20,
   },
   summaryItem: {
     textAlign: 'center',
   },
   summaryValue: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#1f2937',
     marginBottom: 2,
@@ -301,19 +337,19 @@ const styles = StyleSheet.create({
   },
   successProbability: {
     textAlign: 'center',
-    padding: 12,
+    padding: 15,
     backgroundColor: '#ffffff',
-    borderRadius: 6,
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: '#e5e7eb',
   },
   successLabel: {
-    fontSize: 11,
+    fontSize: 12,
     color: '#6b7280',
-    marginBottom: 4,
+    marginBottom: 5,
   },
   successValue: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 2,
   },
@@ -326,17 +362,14 @@ const styles = StyleSheet.create({
   lowSuccess: {
     color: '#ef4444',
   },
-  footer: {
-    marginTop: 40,
-    paddingTop: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#e5e7eb',
-    textAlign: 'center',
-  },
-  footerText: {
-    fontSize: 10,
-    color: '#9ca3af',
-    lineHeight: 1.4,
+  nextStepsSection: {
+    backgroundColor: '#fefefe',
+    padding: 20,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    width: '90%',
+    marginTop: 20,
   },
 });
 
@@ -445,7 +478,7 @@ export const TournamentRecommendationsPDFDocument: React.FC<TournamentRecommenda
 
   return (
     <Document>
-      {/* Page 1: Introduction and Current Analysis */}
+      {/* Page 1: Your Goal, Current Position, Target Player */}
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.title}>Tournament Strategy Plan</Text>
@@ -507,34 +540,39 @@ export const TournamentRecommendationsPDFDocument: React.FC<TournamentRecommenda
             </Text>
           </View>
         </View>
+      </Page>
 
-        <View style={styles.gapAnalysis}>
-          <Text style={styles.gapTitle}>Gap Analysis</Text>
-          <View style={styles.gapGrid}>
-            <View style={styles.gapItem}>
-              <Text style={styles.gapValue}>+{recommendations.currentAnalysis.averagedPointsGap}</Text>
-              <Text style={styles.gapLabel}>Points Gap to Close</Text>
-            </View>
-            <View style={styles.gapItem}>
-              <Text style={styles.gapValue}>{recommendations.summary.timelineMonths}mo</Text>
-              <Text style={styles.gapLabel}>Projected Timeline</Text>
+      {/* Page 2: Gap Analysis and Strategy Overview (Centered) */}
+      <Page size="A4" style={styles.page}>
+        <View style={styles.centeredContainer}>
+          <View style={styles.gapAnalysis}>
+            <Text style={styles.gapTitle}>Gap Analysis</Text>
+            <View style={styles.gapGrid}>
+              <View style={styles.gapItem}>
+                <Text style={styles.gapValue}>+{recommendations.currentAnalysis.averagedPointsGap}</Text>
+                <Text style={styles.gapLabel}>Points Gap to Close</Text>
+              </View>
+              <View style={styles.gapItem}>
+                <Text style={styles.gapValue}>{recommendations.summary.timelineMonths}mo</Text>
+                <Text style={styles.gapLabel}>Projected Timeline</Text>
+              </View>
             </View>
           </View>
-        </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Strategy Overview</Text>
-          <Text style={styles.sectionContent}>
-            This strategic tournament plan has been designed to help you achieve your ranking goal of 
-            #{userGoal.targetRanking} by systematically targeting tournaments that will maximize your 
-            averaged points progression. The plan includes {recommendations.summary.totalTournaments} carefully 
-            selected tournaments over {recommendations.summary.timelineMonths} months, with a projected 
-            success probability of {recommendations.summary.successProbability}.
-          </Text>
+          <View style={styles.strategyOverview}>
+            <Text style={styles.strategyOverviewTitle}>Strategy Overview</Text>
+            <Text style={styles.strategyOverviewText}>
+              This strategic tournament plan has been designed to help you achieve your ranking goal of 
+              #{userGoal.targetRanking} by systematically targeting tournaments that will maximize your 
+              averaged points progression. The plan includes {recommendations.summary.totalTournaments} carefully 
+              selected tournaments over {recommendations.summary.timelineMonths} months, with a projected 
+              success probability of {recommendations.summary.successProbability}.
+            </Text>
+          </View>
         </View>
       </Page>
 
-      {/* Tournament Sequence Pages */}
+      {/* Tournament Pages (One per page, centered) */}
       {recommendations.tournamentSequence.map((item, index) => {
         const tournament = item.tournament;
         const location = tournament.SiteCity && tournament.State 
@@ -544,185 +582,147 @@ export const TournamentRecommendationsPDFDocument: React.FC<TournamentRecommenda
         
         return (
           <Page key={item.sequenceNumber} size="A4" style={styles.page}>
-            <View style={styles.tournamentCard}>
-              <View style={styles.tournamentHeader}>
-                <Text style={styles.tournamentNumber}>{item.sequenceNumber}</Text>
-                <Text style={styles.tournamentName}>{tournament.TournamentName}</Text>
-                <Text style={styles.tournamentType}>{item.strategy.tournamentType}</Text>
-              </View>
-              
-              <View style={styles.tournamentContent}>
-                <View style={styles.tournamentInfo}>
-                  <View style={styles.infoColumn}>
-                    <Text style={styles.infoLabel}>LOCATION</Text>
-                    <Text style={styles.infoValue}>{location}</Text>
-                    
-                    <Text style={styles.infoLabel}>START DATE</Text>
-                    <Text style={styles.infoValue}>{formatDate(tournament.StartDate)}</Text>
-                    
-                    <Text style={styles.infoLabel}>END DATE</Text>
-                    <Text style={styles.infoValue}>{formatDate(tournament.EndDate)}</Text>
-                  </View>
-                  
-                  <View style={styles.infoColumn}>
-                    <Text style={styles.infoLabel}>ENTRY FEE</Text>
-                    <Text style={styles.infoValue}>{entryFee}</Text>
-                    
-                    <Text style={styles.infoLabel}>EVENT TYPE</Text>
-                    <Text style={styles.infoValue}>{tournament.EventType || "N/A"}</Text>
-                    
-                    <Text style={styles.infoLabel}>RANKING POINTS</Text>
-                    <Text style={styles.infoValue}>{tournament.RankingPoints || "N/A"}</Text>
-                  </View>
+            <View style={styles.centeredContainer}>
+              <View style={styles.tournamentCard}>
+                <View style={styles.tournamentHeader}>
+                  <Text style={styles.tournamentNumber}>{item.sequenceNumber}</Text>
+                  <Text style={styles.tournamentName}>{tournament.TournamentName}</Text>
+                  <Text style={styles.tournamentType}>{item.strategy.tournamentType}</Text>
                 </View>
-
-                <View style={styles.strategySection}>
-                  <Text style={styles.strategyTitle}>Tournament Strategy</Text>
-                  <View style={styles.strategyGrid}>
-                    <View style={styles.strategyItem}>
-                      <Text style={styles.strategyValue}>#{item.strategy.requiredFinishPosition}</Text>
-                      <Text style={styles.strategyLabel}>Required Finish</Text>
+                
+                <View style={styles.tournamentContent}>
+                  <View style={styles.tournamentInfo}>
+                    <View style={styles.infoColumn}>
+                      <Text style={styles.infoLabel}>LOCATION</Text>
+                      <Text style={styles.infoValue}>{location}</Text>
+                      
+                      <Text style={styles.infoLabel}>START DATE</Text>
+                      <Text style={styles.infoValue}>{formatDate(tournament.StartDate)}</Text>
+                      
+                      <Text style={styles.infoLabel}>END DATE</Text>
+                      <Text style={styles.infoValue}>{formatDate(tournament.EndDate)}</Text>
                     </View>
-                    <View style={styles.strategyItem}>
-                      <Text style={styles.strategyValue}>{item.strategy.pointsFromFinish}</Text>
-                      <Text style={styles.strategyLabel}>Points Available</Text>
-                    </View>
-                    <View style={styles.strategyItem}>
-                      <Text style={styles.strategyValue}>{item.strategy.estimatedDivisionEntrants}</Text>
-                      <Text style={styles.strategyLabel}>Est. Entrants</Text>
+                    
+                    <View style={styles.infoColumn}>
+                      <Text style={styles.infoLabel}>ENTRY FEE</Text>
+                      <Text style={styles.infoValue}>{entryFee}</Text>
+                      
+                      <Text style={styles.infoLabel}>EVENT TYPE</Text>
+                      <Text style={styles.infoValue}>{tournament.EventType || "N/A"}</Text>
+                      
+                      <Text style={styles.infoLabel}>RANKING POINTS</Text>
+                      <Text style={styles.infoValue}>{tournament.RankingPoints || "N/A"}</Text>
                     </View>
                   </View>
-                  <Text style={styles.reasoningText}>{item.strategy.reasoning}</Text>
+
+                  <View style={styles.strategySection}>
+                    <Text style={styles.strategyTitle}>Tournament Strategy</Text>
+                    <View style={styles.strategyGrid}>
+                      <View style={styles.strategyItem}>
+                        <Text style={styles.strategyValue}>#{item.strategy.requiredFinishPosition}</Text>
+                        <Text style={styles.strategyLabel}>Required Finish</Text>
+                      </View>
+                      <View style={styles.strategyItem}>
+                        <Text style={styles.strategyValue}>{item.strategy.pointsFromFinish}</Text>
+                        <Text style={styles.strategyLabel}>Points Available</Text>
+                      </View>
+                      <View style={styles.strategyItem}>
+                        <Text style={styles.strategyValue}>{item.strategy.estimatedDivisionEntrants}</Text>
+                        <Text style={styles.strategyLabel}>Est. Entrants</Text>
+                      </View>
+                    </View>
+                    <Text style={styles.reasoningText}>{item.strategy.reasoning}</Text>
+                  </View>
+
+                  <View style={styles.progressSection}>
+                    <Text style={styles.progressTitle}>Points Progression</Text>
+                    <View style={styles.progressGrid}>
+                      <View style={styles.progressItem}>
+                        <Text style={styles.progressValue}>+{Math.round(item.pointsProgression.pointsEarned)}</Text>
+                        <Text style={styles.progressLabel}>Points Earned</Text>
+                      </View>
+                      <View style={styles.progressItem}>
+                        <Text style={styles.progressValue}>{Math.round(item.pointsProgression.newTotalPoints)}</Text>
+                        <Text style={styles.progressLabel}>New Total</Text>
+                      </View>
+                      <View style={styles.progressItem}>
+                        <Text style={styles.progressValue}>{item.pointsProgression.newExposures}</Text>
+                        <Text style={styles.progressLabel}>New Exposures</Text>
+                      </View>
+                      <View style={styles.progressItem}>
+                        <Text style={styles.progressValue}>{Math.round(item.pointsProgression.newAveragedPoints)}</Text>
+                        <Text style={styles.progressLabel}>New Avg Points</Text>
+                      </View>
+                    </View>
+                    
+                    <View style={styles.progressUpdate}>
+                      <Text style={styles.progressUpdateText}>
+                        Progress Update: {item.pointsProgression.averagedPointsProgress}
+                        {item.pointsProgression.remainingGap > 0 
+                          ? `\n${Math.round(item.pointsProgression.remainingGap)} points remaining to reach target.`
+                          : '\nCongratulations! Target ranking achieved with this tournament.'}
+                      </Text>
+                    </View>
+                  </View>
+
+                  {tournament.ClubLockerUrl && (
+                    <View style={{ marginTop: 15 }}>
+                      <Text style={styles.infoLabel}>REGISTRATION</Text>
+                      <Text style={[styles.infoValue, { color: '#3b82f6' }]}>
+                        {tournament.ClubLockerUrl}
+                      </Text>
+                    </View>
+                  )}
                 </View>
-
-                <View style={styles.progressSection}>
-                  <Text style={styles.progressTitle}>Points Progression</Text>
-                  <View style={styles.progressGrid}>
-                    <View style={styles.progressItem}>
-                      <Text style={styles.progressValue}>+{Math.round(item.pointsProgression.pointsEarned)}</Text>
-                      <Text style={styles.progressLabel}>Points Earned</Text>
-                    </View>
-                    <View style={styles.progressItem}>
-                      <Text style={styles.progressValue}>{Math.round(item.pointsProgression.newTotalPoints)}</Text>
-                      <Text style={styles.progressLabel}>New Total</Text>
-                    </View>
-                    <View style={styles.progressItem}>
-                      <Text style={styles.progressValue}>{item.pointsProgression.newExposures}</Text>
-                      <Text style={styles.progressLabel}>New Exposures</Text>
-                    </View>
-                    <View style={styles.progressItem}>
-                      <Text style={styles.progressValue}>{Math.round(item.pointsProgression.newAveragedPoints)}</Text>
-                      <Text style={styles.progressLabel}>New Avg Points</Text>
-                    </View>
-                  </View>
-                  
-                  <View style={styles.progressUpdate}>
-                    <Text style={styles.progressUpdateText}>
-                      Progress Update: {item.pointsProgression.averagedPointsProgress}
-                      {item.pointsProgression.remainingGap > 0 
-                        ? `\n${Math.round(item.pointsProgression.remainingGap)} points remaining to reach target.`
-                        : '\nCongratulations! Target ranking achieved with this tournament.'}
-                    </Text>
-                  </View>
-                </View>
-
-                {tournament.ClubLockerUrl && (
-                  <View style={{ marginTop: 15 }}>
-                    <Text style={styles.infoLabel}>REGISTRATION</Text>
-                    <Text style={[styles.infoValue, { color: '#3b82f6' }]}>
-                      {tournament.ClubLockerUrl}
-                    </Text>
-                  </View>
-                )}
               </View>
             </View>
           </Page>
         );
       })}
 
-      {/* Final Summary Page */}
+      {/* Final Page: Plan Summary and Next Steps (Centered) */}
       <Page size="A4" style={styles.page}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Plan Summary & Next Steps</Text>
-        </View>
+        <View style={styles.centeredContainer}>
+          <View style={styles.summarySection}>
+            <Text style={styles.summaryTitle}>Tournament Plan Summary</Text>
+            
+            <View style={styles.summaryGrid}>
+              <View style={styles.summaryItem}>
+                <Text style={styles.summaryValue}>{recommendations.summary.totalTournaments}</Text>
+                <Text style={styles.summaryLabel}>Total Tournaments</Text>
+              </View>
+              <View style={styles.summaryItem}>
+                <Text style={styles.summaryValue}>+{recommendations.summary.totalPointsToEarn}</Text>
+                <Text style={styles.summaryLabel}>Points to Earn</Text>
+              </View>
+              <View style={styles.summaryItem}>
+                <Text style={styles.summaryValue}>{recommendations.summary.finalProjectedAveragedPoints}</Text>
+                <Text style={styles.summaryLabel}>Final Avg Points</Text>
+              </View>
+              <View style={styles.summaryItem}>
+                <Text style={styles.summaryValue}>#{recommendations.summary.projectedFinalRanking}</Text>
+                <Text style={styles.summaryLabel}>Projected Ranking</Text>
+              </View>
+            </View>
 
-        <View style={styles.summarySection}>
-          <Text style={styles.summaryTitle}>Tournament Plan Summary</Text>
-          
-          <View style={styles.summaryGrid}>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryValue}>{recommendations.summary.totalTournaments}</Text>
-              <Text style={styles.summaryLabel}>Total Tournaments</Text>
-            </View>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryValue}>+{recommendations.summary.totalPointsToEarn}</Text>
-              <Text style={styles.summaryLabel}>Points to Earn</Text>
-            </View>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryValue}>{recommendations.summary.finalProjectedAveragedPoints}</Text>
-              <Text style={styles.summaryLabel}>Final Avg Points</Text>
-            </View>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryValue}>#{recommendations.summary.projectedFinalRanking}</Text>
-              <Text style={styles.summaryLabel}>Projected Ranking</Text>
+            <View style={styles.successProbability}>
+              <Text style={styles.successLabel}>Success Probability</Text>
+              <Text style={[styles.successValue, getSuccessColor(recommendations.summary.successProbability)]}>
+                {recommendations.summary.successProbability.toUpperCase()}
+              </Text>
             </View>
           </View>
 
-          <View style={styles.successProbability}>
-            <Text style={styles.successLabel}>Success Probability</Text>
-            <Text style={[styles.successValue, getSuccessColor(recommendations.summary.successProbability)]}>
-              {recommendations.summary.successProbability.toUpperCase()}
+          <View style={styles.nextStepsSection}>
+            <Text style={[styles.sectionTitle, { textAlign: 'center', marginBottom: 15 }]}>Next Steps</Text>
+            <Text style={[styles.sectionContent, { textAlign: 'left' }]}>
+              1. Review the tournament sequence and mark important dates on your calendar{'\n\n'}
+              2. Begin early registration for tournaments as entry periods open{'\n\n'}
+              3. Develop a training schedule that peaks for each target tournament{'\n\n'}
+              4. Monitor your progress after each tournament and adjust the plan if needed{'\n\n'}
+              5. Stay updated on any tournament schedule changes or new opportunities
             </Text>
           </View>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Key Success Factors</Text>
-          <Text style={styles.sectionContent}>
-            • Consistent performance at the required finish positions{'\n'}
-            • Early registration to secure spots in competitive tournaments{'\n'}
-            • Proper preparation and training leading up to each event{'\n'}
-            • Strategic tournament selection based on field strength{'\n'}
-            • Maintaining physical and mental fitness throughout the campaign
-          </Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Important Considerations</Text>
-          <Text style={styles.sectionContent}>
-            This plan is based on current rankings and historical tournament data. Actual results 
-            may vary depending on various factors including:
-            {'\n\n'}
-            • Changes in tournament fields and competition levels{'\n'}
-            • Your performance and consistency in tournaments{'\n'}
-            • Other players' participation and results{'\n'}
-            • Tournament scheduling changes or cancellations{'\n'}
-            • Ranking system updates or modifications
-            {'\n\n'}
-            Regular monitoring and plan adjustments are recommended as you progress through 
-            the tournament sequence.
-          </Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Next Steps</Text>
-          <Text style={styles.sectionContent}>
-            1. Review the tournament sequence and mark important dates on your calendar{'\n'}
-            2. Begin early registration for tournaments as entry periods open{'\n'}
-            3. Develop a training schedule that peaks for each target tournament{'\n'}
-            4. Monitor your progress after each tournament and adjust the plan if needed{'\n'}
-            5. Stay updated on any tournament schedule changes or new opportunities
-          </Text>
-        </View>
-
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Generated by: AI Tournament Strategy System{'\n'}
-            Report Date: {new Date(timestamp).toLocaleDateString()}{'\n'}
-            Target Player: {recommendations.summary.targetPlayerToSurpass}{'\n'}
-            Division: {recommendations.currentAnalysis.divisionName}{'\n'}
-            Plan Duration: {recommendations.summary.timelineMonths} months
-          </Text>
         </View>
       </Page>
     </Document>
