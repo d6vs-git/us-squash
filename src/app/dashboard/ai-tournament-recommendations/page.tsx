@@ -242,7 +242,7 @@ export default function TournamentRecommendations() {
       TournamentContact: item.TournamentContact,
       ContactEmail: item.ContactEmail,
       OrganizerOrganization: item.OrganizerOrganization,
-      URL: item.URL,
+      URL: `https://clublocker.com/tournaments/${item.TournamentID}/sign-up`, 
       VenueId: item.VenueId,
       RankingPeriod: item.RankingPeriod,
       NumPlayers: item.NumPlayers,
@@ -289,9 +289,7 @@ export default function TournamentRecommendations() {
     // Validate all required fields
     if (
       !userGoal.targetRanking ||
-      userGoal.targetRanking <= 0 ||
-      !userGoal.type ||
-      !userGoal.timeframe
+      userGoal.targetRanking <= 0
     ) {
       setShowGoalInput(true);
       setError("Please fill all required fields: Goal Type, Timeframe, and Target Ranking.");
@@ -506,40 +504,6 @@ export default function TournamentRecommendations() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="goalType">Goal Type</Label>
-                <Select value={userGoal.type} onValueChange={(value) => setUserGoal({ ...userGoal, type: value })}>
-                  <SelectTrigger className="border-border">
-                    <SelectValue placeholder="Select your primary goal" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ranking-improvement">Improve Ranking</SelectItem>
-                    <SelectItem value="rating-improvement">Improve Rating</SelectItem>
-                    <SelectItem value="championship-qualification">Championship Qualification</SelectItem>
-                    <SelectItem value="points-accumulation">Points Accumulation</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="timeframe">Timeframe</Label>
-                <Select
-                  value={userGoal.timeframe}
-                  onValueChange={(value) => setUserGoal({ ...userGoal, timeframe: value })}
-                >
-                  <SelectTrigger className="border-border">
-                    <SelectValue placeholder="Select timeframe" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="3-months">Next 3 Months</SelectItem>
-                    <SelectItem value="6-months">Next 6 Months</SelectItem>
-                    <SelectItem value="1-year">Next Year</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
             <div className="space-y-2">
               <Label htmlFor="targetRanking">Target Ranking *</Label>
               <Input
@@ -741,7 +705,7 @@ export default function TournamentRecommendations() {
                     ? `${tournament.SiteCity}, ${tournament.State}`
                     : tournament.SiteCity || tournament.State || "Location TBD"
                 const entryFee = tournament.regularFee?.price ? `${tournament.regularFee.price}` : "N/A"
-                const registrationLink = tournament.ClubLockerUrl || tournament.URL || ""
+                const registrationLink = tournament.URL || ""
 
                 return (
                   <Card key={item.sequenceNumber} className="border-border transition-all hover:shadow-md">
