@@ -1845,30 +1845,20 @@ export function createTournamentRecommendationPrompt(
 
   // Create user constraints section if they exist
 
-  let constraintsSection = ""
+let constraintsSection = ""
 
-  if (userConstraints.trim()) {
-
-    constraintsSection = `
-
+if (userConstraints.trim()) {
+  constraintsSection = `
 🎯 USER PREFERENCES & CONSTRAINTS:
-
 "${userConstraints}"
 
-
-
 ⚠️ CRITICAL: You must respect and follow the user's stated preferences and constraints above.
-
 If the user says they "can't play championships" or "no JCT" - DO NOT recommend those tournaments.
-
 If they specify "only silver tournaments" - ONLY recommend silver tournaments.
-
 If they mention any other restrictions - follow them exactly.
-
 `
-
-  }
-  return `You are a US Squash tournament strategist. Create a tournament plan using ONLY the tournaments provided below.
+}
+return `You are a US Squash tournament strategist. Create a tournament plan using ONLY the tournaments provided below.
 
 MISSION BRIEF:
 - Current Ranking: #${currentRanking}
@@ -1880,28 +1870,91 @@ MISSION BRIEF:
 - Player Division: ${divisionName}
 - Player Constraints: ${constraintsSection}
 
-TOURNAMENT PRIORITY SYSTEM (CRITICAL - FOLLOW THIS ORDER):
-1. USJuniorOpen (3500 points for 1st) - HIGHEST PRIORITY
-2. JCTandJuniorNationals (3500 points for 1st) - VERY HIGH PRIORITY  
-3. JuniorGold (2000 points for 1st) - HIGH PRIORITY
-4. SilverNationals (1500 points for 1st) - MEDIUM PRIORITY
-5. JuniorSilver (840 points for 1st) - LOW PRIORITY
-6. JuniorBronze (425 points for 1st) - LOWEST PRIORITY
+🚨 CRITICAL TOURNAMENT SELECTION STRATEGY:
+
+PLAYER STATUS CHECK:
+- Current Ranking: ${currentRanking}
+- Championship Eligibility: ${currentRanking <= 32 ? 'ELITE PLAYER - Can play championships immediately' : 'DEVELOPING PLAYER - Must build through progression'}
+
+TOURNAMENT SELECTION APPROACH:
+${currentRanking <= 32 ? 
+  'ELITE APPROACH: Can select any tournament including JCTandJuniorNationals/USJuniorOpen from tournament 1' : 
+  'PROGRESSIVE BUILDING APPROACH: Must start with Silver/Gold and build toward championships'}
+
+MANDATORY PROGRESSIVE BUILDING RULES (FOR RANKS > 32):
+1. 🚨 RESPECT USER CONSTRAINTS ABOVE ALL
+2. START LOW, BUILD HIGH: Begin with Junior Silver/Bronze/Gold tournaments
+3. CHAMPIONSHIP RESTRICTION: JCTandJuniorNationals and USJuniorOpen FORBIDDEN until rank ≤ 32
+4. EARN YOUR WAY UP: Must prove yourself at lower levels first
+
+TOURNAMENT DIFFICULTY LADDER (USE THIS ORDER FOR PROGRESSION):
+- FOUNDATION: Junior Bronze (425 pts), Junior Silver (840 pts)
+- INTERMEDIATE: Junior Gold (2000 pts), Silver Nationals (1500 pts)  
+- ELITE: JCTandJuniorNationals (3500 pts), USJuniorOpen (3500 pts)
 
 AVAILABLE TOURNAMENT TYPES IN DATA:
 ${Object.entries(tournamentTypeDistribution)
   .map(([type, count]) => `- ${type}: ${count} tournaments`)
   .join("\n")}
 
+SELECTION LOGIC:
+${currentRanking <= 32 ? `
+ELITE PLAYER SELECTION:
+- Can choose any tournament type from Tournament 1 onwards
+- Still recommended to build progressively for best development
+- Championships available immediately if desired
+` : `
+DEVELOPING PLAYER SELECTION (Current Case):
+- Tournament 1: Junior Silver, Junior Bronze, or Junior Gold ONLY
+- Tournament 2: Junior Silver, Junior Gold, or Silver Nationals ONLY  
+- Tournament 3+: Championships available ONLY if newProjectedRank ≤ 32
+- Focus on steady progression, not jumping to elite level too early
+`}
+
 MANDATORY SELECTION RULES:
-🚨 RESPECT USER CONSTRAINTS - This is mandatory
-1. PRIORITIZE HIGHER-LEVEL TOURNAMENTS: Select USJuniorOpen, JCT, or Gold tournaments when available
-2. Use actualDivisionEntrants field when available (this is real data from the API)
-3. Only use estimatedDivisionEntrants as fallback when actualDivisionEntrants is 0 or missing
-4. Select EXACTLY 4 unique tournaments with different TournamentIDs
-5. Choose realistic finish positions (1st-4th for higher tournaments, 1st-2nd for lower)
-6. Calculate points using the exact bracket size from entrants
-7. Ensure final averaged points reach or exceed ${targetPlayerAveragedPoints}
+1. 🚨 RESPECT USER CONSTRAINTS - Override everything else
+2. FOLLOW PROGRESSIVE BUILDING - Don't jump difficulty levels too quickly
+3. CHAMPIONSHIP GATE: JCTandJuniorNationals/USJuniorOpen only if currentRanking ≤ 32 OR newProjectedRank ≤ 32
+4. Use actualDivisionEntrants field when available (real API data)
+5. Use estimatedDivisionEntrants as fallback when actualDivisionEntrants is 0/missing
+6. Select EXACTLY 4 unique tournaments with different TournamentIDs
+7. Choose realistic finish positions based on current skill level and progression
+8. Calculate points using exact bracket size from entrants
+9. Build toward final averaged points of ${targetPlayerAveragedPoints}
+
+POINTS CALCULATION RULES:
+- Use actualDivisionEntrants to determine bracket size:
+  * 1-8 entrants = "1-8" bracket
+  * 9-16 entrants = "9-16" bracket  
+  * 17-24 entrants = "17-24" bracket
+  * 25-32 entrants = "25-32" bracket
+  * 33-64 entrants = "33-64" bracket
+  * 65+ entrants = "65-128" bracket
+
+RANKING PROGRESSION RULES:
+1. Use provided currentRanking as starting point
+2. After each tournament, calculate newProjectedRank using rankingsData
+3. Use newProjectedRank to determine eligibility for subsequent tournaments
+4. Track rank improvement throughout the progression
+
+SEQUENTIAL TOURNAMENT SELECTION:
+1. Tournament 1: ${currentRanking <= 32 ? 'Any tournament available' : 'Foundation level only (Silver/Bronze/Gold)'}
+2. Tournament 2: Check rank progression, select appropriate level
+3. Tournament 3: Continue progression, championships if rank qualifies  
+4. Tournament 4: Peak tournament based on final projected rank
+
+EXAMPLE CORRECT PROGRESSION FOR RANK ${currentRanking}:
+${currentRanking <= 32 ? `
+- Tournament 1: Can select JCTandJuniorNationals or continue building
+- Tournament 2: Continue at appropriate level
+- Tournament 3: Maintain or increase difficulty
+- Tournament 4: Peak performance tournament
+` : `
+- Tournament 1: Junior Silver → Build foundation
+- Tournament 2: Junior Gold → Develop skills  
+- Tournament 3: Silver Nationals → Competitive experience
+- Tournament 4: Championships IF rank ≤ 32, otherwise continue building
+`}
 
 POINTS_TABLES = {
   USJuniorOpen: {
@@ -3649,21 +3702,6 @@ POINTS_TABLES = {
 
 
 
-POINTS CALCULATION RULES:
-- Use actualDivisionEntrants to determine bracket size:
-  * 1-8 entrants = "1-8" bracket
-  * 9-16 entrants = "9-16" bracket  
-  * 17-24 entrants = "17-24" bracket
-  * 25-32 entrants = "25-32" bracket
-  * 33-64 entrants = "33-64" bracket
-  * 65+ entrants = "65-128" bracket
-
-TOURNAMENT SELECTION STRATEGY:
-1. First, look for USJuniorOpen or JCT tournaments (highest points)
-2. Then select JuniorGold tournaments (good points, more achievable)
-3. Only use Silver/Bronze if no higher-level options exist
-4. Balance point potential with realistic finish expectations
-
 RETURN ONLY A VALID JSON OBJECT:
 
 {
@@ -3677,7 +3715,9 @@ RETURN ONLY A VALID JSON OBJECT:
     "targetPlayerAveragedPoints": ${targetPlayerAveragedPoints},
     "averagedPointsGap": ${averagedPointsGap},
     "divisionName": "${divisionName}",
-    "strategicApproach": ""Strategy respecting user preferences: ${userConstraints || "No specific constraints"}"
+    "isElitePlayer": ${currentRanking <= 32},
+    "championshipsAvailable": ${currentRanking <= 32},
+    "strategicApproach": "Progressive building strategy respecting rank constraints and user preferences"
   },
   "tournamentSequence": [
     {
@@ -3689,47 +3729,47 @@ RETURN ONLY A VALID JSON OBJECT:
         "SiteCity": [USE REAL CITY FROM DATA],
         "State": [USE REAL STATE FROM DATA],
         "EventType": [USE REAL TYPE FROM DATA],
-        "tournamentType": [USE tournamentType FROM DATA],
+        "tournamentType": [MUST follow progression rules],
         "actualDivisionEntrants": [USE actualDivisionEntrants FROM DATA],
         "regularFee": "[USE REAL FEE FROM DATA]",
         "ClubLockerUrl": "[USE REAL URL FROM DATA]"
       },
       "strategy": {
-        "requiredFinishPosition": [based on tournament level and points required],
+        "requiredFinishPosition": [realistic based on current level],
         "estimatedDivisionEntrants": "[USE actualDivisionEntrants if > 0, else estimatedDivisionEntrants]",
-        "tournamentType": "[MUST be US Junior Open, JCT and Junior Nationals, Junior Gold, etc.]",
+        "tournamentType": "[MUST respect progression rules]",
         "pointsFromFinish": [CALCULATE using bracket size and position],
-        "reasoning": "Selected [tournament type] tournament with [X] division entrants, targeting [position] place for [points] points"
+        "reasoning": "Selected [appropriate level] tournament for progressive development"
       },
       "pointsProgression": {
-            "pointsEarned": [refer POINTS_TABLES],
-            "newTotalPoints": [Add pointsEarned to currentTotalPoints],
-            "newExposures": [Add 1 to currentExposures],
-            "newDivisor": [If newExposures ≤ 4, divisor is 4. Else, divisor = 4 + floor((newExposures - 4) / 2)],
-            "newAveragedPoints": [Divide newTotalPoints by newDivisor and round to nearest integer],
-            "averagedPointsProgress": "Progress toward ${targetPlayerAveragedPoints} target"
-            "remainingGap": [Subtract newAveragedPoints from targetPlayerAveragedPoints. If result is negative, return 0]
-          }
+        "pointsEarned": [refer to points tables],
+        "newTotalPoints": [Add pointsEarned to currentTotalPoints],
+        "newExposures": [Add 1 to currentExposures],
+        "newDivisor": [If newExposures ≤ 4, divisor is 4. Else, divisor = 4 + floor((newExposures - 4) / 2)],
+        "newAveragedPoints": [Divide newTotalPoints by newDivisor and round to nearest integer],
+        "newProjectedRank": [Use rankingsData to find rank based on newAveragedPoints],
+        "rankImprovement": [Difference between old and new rank],
+        "championshipsNowEligible": [true if newProjectedRank ≤ 32, false otherwise],
+        "averagedPointsProgress": "Progress toward ${targetPlayerAveragedPoints} target",
+        "remainingGap": [Subtract newAveragedPoints from targetPlayerAveragedPoints. If negative, return 0]
       }
     }
-    // ... repeat for 3 more tournaments
+    // ... repeat for 3 more tournaments, using newProjectedRank from previous tournament
   ],
   "summary": {
     "totalTournaments": 4,
     "totalPointsToEarn": [sum of all points],
     "finalProjectedAveragedPoints": [final averaged points],
     "targetPlayerToSurpass": "${targetPlayerName}",
-    projectedFinalRanking": [estimated ranking based on final averaged points and ${rankingsData}(must always be a number)],
+    "projectedFinalRanking": [estimated ranking based on final averaged points],
     "timelineMonths": 6,
-    "successProbability": "high",
-    "strategicNote": "Selected [X] high-level tournaments to maximize point potential"
+    "successProbability": "moderate",
+    "strategicNote": "Progressive development plan building from current level toward championship eligibility"
   }
 }
 
-TOURNAMENTS DATA (SORTED BY PRIORITY):
+TOURNAMENTS DATA (SORTED BY AVAILABLE DATES):
 ${JSON.stringify(sortedTournaments, null, 2)}
 
-
-Remember: The user's stated preferences and constraints are mandatory. Follow them exactly.
-CRITICAL: You MUST prioritize higher-level tournaments (USJuniorOpen, JCT, Gold) over Silver/Bronze tournaments to reach the target ranking. Use the actualDivisionEntrants field when available for accurate point calculations.`
+Remember: Start appropriate to current level, build progressively, respect rank constraints for championships.`
 }
