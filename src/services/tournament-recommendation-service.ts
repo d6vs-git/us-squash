@@ -996,7 +996,7 @@ export class TournamentRecommendationService {
 
       // Create strategic analysis with enhanced tournament data
       const strategicAnalysis = {
-        tournaments: constrainedTournaments.slice(0, 20),
+        tournaments: constrainedTournaments.slice(0, 100),
         totalTournaments: upcomingTournaments.length,
         eligibleTournaments: upcomingTournaments.filter((t) => this.isEligible(t, userData)).length,
         constrainedTournaments: constrainedTournaments.length,
