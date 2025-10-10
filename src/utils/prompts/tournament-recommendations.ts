@@ -1830,21 +1830,35 @@ export function createTournamentRecommendationPrompt(
   const rankingGap = currentRanking - targetRanking
   const averagedPointsGap = targetPlayerAveragedPoints - currentAveragedPoints
 
-  // Sort tournaments by priority (higher level tournaments first)
+  // FIXED: Sort tournaments by date only, not by priority
+  // This gives the AI access to all tournament types in chronological order
+  // The AI will select appropriate tournaments based on player rank and progression
   const sortedTournaments = strategicAnalysis.tournaments.sort((a: any, b: any) => {
-    if (a.priority !== b.priority) {
-      return a.priority - b.priority
-    }
     return new Date(a.StartDate).getTime() - new Date(b.StartDate).getTime()
   })
+
+  // Optional: Group tournaments by type for better AI selection
+  const tournamentsByType = {
+    championships: sortedTournaments.filter((t: any) => 
+      t.tournamentType === 'JCTandJuniorNationals' || t.tournamentType === 'USJuniorOpen'
+    ),
+    gold: sortedTournaments.filter((t: any) => t.tournamentType === 'JuniorGold'),
+    silverNationals: sortedTournaments.filter((t: any) => t.tournamentType === 'SilverNationals'),
+    silver: sortedTournaments.filter((t: any) => t.tournamentType === 'JuniorSilver'),
+    bronze: sortedTournaments.filter((t: any) => t.tournamentType === 'JuniorBronze'),
+  }
+
+  console.log("Tournament Distribution:", {
+    championships: tournamentsByType.championships.length,
+    gold: tournamentsByType.gold.length,
+    silverNationals: tournamentsByType.silverNationals.length,
+    silver: tournamentsByType.silver.length,
+    bronze: tournamentsByType.bronze.length,
+  })
+
   const tournamentTypeDistribution = strategicAnalysis.tournamentTypeDistribution || {}
-
   const userConstraints = strategicAnalysis.userConstraints || ""
-
-
-
-  // Create user constraints section if they exist
-
+  // ... rest of your prompt generation code
 let constraintsSection = ""
 
 if (userConstraints.trim()) {
@@ -3768,8 +3782,8 @@ RETURN ONLY A VALID JSON OBJECT:
   }
 }
 
-TOURNAMENTS DATA (SORTED BY AVAILABLE DATES):
-${JSON.stringify(sortedTournaments, null, 2)}
+TOURNAMENTS DATA BY TYPE:
+${JSON.stringify(tournamentsByType, null, 2)}
 
 Remember: Start appropriate to current level, build progressively, respect rank constraints for championships.`
 }
